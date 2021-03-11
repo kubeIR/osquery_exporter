@@ -3,9 +3,9 @@ build?=alpha
 commit=$(shell git rev-parse --short HEAD)
 UNAME_S:= $(shell uname -s)
 package=github.com/prateeknischal/osqueryexporter
-LDFLAGS=-X $(package)/ingestd.Version=$(version)
-LDFLAGS+= -X $(package)/ingestd.Commit=$(commit)
-LDFLAGS+= -X $(package)/ingestd.Build=$(build)
+LDFLAGS=-X $(package)/constants.version=$(version)
+LDFLAGS+= -X $(package)/constants.commit=$(commit)
+LDFLAGS+= -X $(package)/constants.build=$(build)
 
 ifeq ($(UNAME_S),Linux)
 	LDFLAGS+= -extldflags '-static' -linkmode external

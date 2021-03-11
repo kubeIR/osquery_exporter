@@ -1,12 +1,15 @@
-package osqueryexporter
+package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/golang/glog"
-	"github.com/kolide/osquery-go"
+	"github.com/prateeknischal/osqueryexporter/internal/api"
+	"github.com/prateeknischal/osqueryexporter/internal/client"
 	"github.com/prateeknischal/osqueryexporter/internal/constants"
 )
 
@@ -25,8 +28,16 @@ func main() {
 		os.Exit(0)
 	}
 
-	_, err := osquery.NewExtensionManagerServer("foo", *socket)
+	timeoutDuration := time.Duration(*timeout) * time.Second
+
+	var (
+		c   client.Client
+		err error
+	)
+
+	c, err = client.NewQsqueryClient(*socket, timeoutDuration)
 	if err != nil {
-		glog.Fatalf("Failed to initialize the extension", err)
+		glog.Fatal(err)
 	}
+	api.Server(context.Background(), "localhost:5000", c)
 }
