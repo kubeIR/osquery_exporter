@@ -35,7 +35,7 @@ func main() {
 		err error
 	)
 
-	c, err = client.NewQsqueryClient(*socket, timeoutDuration)
+	c, err = client.NewOsqueryClient(*socket, timeoutDuration)
 	if err != nil {
 		glog.Fatal(err)
 	}

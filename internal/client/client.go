@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"errors"
+	"sync"
 	"time"
 
 	"github.com/golang/glog"
@@ -18,11 +19,13 @@ type Client interface {
 
 // OsqueryClient implements the Client interface with osquery as the backend.
 type OsqueryClient struct {
+	mu     *sync.Mutex
 	client *osquery.ExtensionManagerClient
 }
 
-// NewOsqueryClient returns a OsqueryClient to perform queries.
-func NewQsqueryClient(
+// NewOsqueryClient returns a OsqueryClient which is thread safe.
+// The client contains a mutex which is locked at every query.
+func NewOsqueryClient(
 	socket string, timeout time.Duration,
 ) (*OsqueryClient, error) {
 	client, err := osquery.NewClient(socket, timeout)
@@ -31,7 +34,7 @@ func NewQsqueryClient(
 		return nil, err
 	}
 
-	return &OsqueryClient{client}, nil
+	return &OsqueryClient{mu: &sync.Mutex{}, client: client}, nil
 }
 
 func (c *OsqueryClient) Query(
@@ -44,7 +47,10 @@ func (c *OsqueryClient) Query(
 	)
 
 	go func(r chan<- []map[string]string, e chan<- error) {
+		c.mu.Lock()
+		glog.V(2).Info("Executing query", sql)
 		res, err := c.client.QueryRows(sql)
+		c.mu.Unlock()
 		if err != nil {
 			glog.V(2).Info("Failed to query osquery", err)
 			e <- err

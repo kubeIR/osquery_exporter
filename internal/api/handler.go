@@ -27,6 +27,7 @@ func (qh QueryHandler) handle(w http.ResponseWriter, r *http.Request) {
 	glog.V(2).Infof("Query: %s", q.Query)
 	res, err := qh.c.Query(context.Background(), q.Query)
 	if err != nil {
+		glog.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

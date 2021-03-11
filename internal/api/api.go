@@ -3,8 +3,10 @@ package api
 import (
 	"context"
 	"net/http"
+	"os"
 
 	"github.com/golang/glog"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/prateeknischal/osqueryexporter/internal/client"
 )
@@ -16,7 +18,8 @@ func Server(ctx context.Context, addr string, cl client.Client) {
 
 	server := http.Server{
 		Addr:    addr,
-		Handler: r,
+		Handler: handlers.CombinedLoggingHandler(os.Stdout, r),
 	}
+	glog.V(2).Infof("Starting server at %s", addr)
 	glog.Fatal(server.ListenAndServe())
 }
