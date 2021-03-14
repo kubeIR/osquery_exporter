@@ -19,6 +19,7 @@ var (
 	interval = flag.Int("interval", 3, "Delay between connectivity checks")
 	verbose  = flag.Bool("verbose", false, "Enable verbose output")
 	ver      = flag.Bool("version", false, "Version")
+	addr     = flag.String("addr", "0.0.0.0:5000", "host:port to listen on")
 )
 
 func main() {
@@ -39,5 +40,5 @@ func main() {
 	if err != nil {
 		glog.Fatal(err)
 	}
-	api.Server(context.Background(), "0.0.0.0:5000", c)
+	api.Server(context.Background(), *addr, c)
 }
