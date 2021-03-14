@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osquery-deployment
+  labels:
+    app: osquery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: osquery
+  template:
+    metadata:
+      labels:
+        app: osquery
+    spec:
+      containers:
+      - name: osquery-exporter
+        image: prateeknischal/osquery_exporter
+        ports:
+          - containerPort: 5000
+        volumeMounts:
+        - name: osquery-socket
+          mountPath: /var/osquery/
+      volumes:
+      - name: osquery-socket
+        hostPath:
+          path: /var/osquery/
+
+
