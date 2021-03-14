@@ -10,6 +10,5 @@ builds:
       - >
         -s -w
         -X github.com/prateeknischal/osqueryexporter/internal/constants.Version={{ .Version }}
-        -X github.com/prateeknischal/osqueryexporter/internal/constants.Build=alpha
-        -X github.com/prateeknischal/osqueryexporter/internal/constants.Commit={{ .Commit }}
+        -X github.com/prateeknischal/osqueryexporter/internal/constants.Commit={{ slice .Commit 0 7 }}
 
