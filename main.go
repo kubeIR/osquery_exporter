@@ -39,5 +39,5 @@ func main() {
 	if err != nil {
 		glog.Fatal(err)
 	}
-	api.Server(context.Background(), "localhost:5000", c)
+	api.Server(context.Background(), "0.0.0.0:5000", c)
 }
