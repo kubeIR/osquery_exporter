@@ -38,7 +38,7 @@ $ make
 $ ./osquery_exporter --version
 0.0.1-alpha+25571f8
 
-$ ./osquery_exporter --socket /path/to/osquery.sock
+$ ./osquery_exporter --socket /path/to/osquery.sock --addr "0.0.0.0:5000"
 ```
 
 This requires osqueryd running already with the socket file pointing to the same
