@@ -18,13 +18,13 @@ var (
 	timeout  = flag.Int("timeout", 3, "Timeout to connect to socket file")
 	interval = flag.Int("interval", 3, "Delay between connectivity checks")
 	verbose  = flag.Bool("verbose", false, "Enable verbose output")
-	version  = flag.Bool("version", false, "Version")
+	ver      = flag.Bool("version", false, "Version")
 )
 
 func main() {
 	flag.Parse()
-	if *version {
-		fmt.Fprintln(os.Stdout, constants.Version())
+	if *ver {
+		fmt.Fprintln(os.Stdout, constants.GetVersion())
 		os.Exit(0)
 	}
 

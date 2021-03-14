@@ -3,11 +3,11 @@ package constants
 import "fmt"
 
 var (
-	version = "0.0.1"
-	build   = "dirty"
-	commit  = "0000000"
+	Version = "0.0.1"
+	Build   = "dirty"
+	Commit  = "0000000"
 )
 
-func Version() string {
-	return fmt.Sprintf("%s-%s+%s", version, build, commit)
+func GetVersion() string {
+	return fmt.Sprintf("%s-%s+%s", Version, Build, Commit)
 }
