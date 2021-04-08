@@ -44,3 +44,16 @@ $ ./osquery_exporter --socket /path/to/osquery.sock --addr "0.0.0.0:5000"
 This requires osqueryd running already with the socket file pointing to the same
 socket file. The daemon is an extension that registers with the osqueryd process
 explicitly and is not managed by osquery using its extension autoload feature.
+
+## Building a container with osquery and the extension running
+A container can be built out of the extension that is running osqueryd as well
+as the extension. To build the container,
+```bash
+docker build --build-args VERSION=<release-version> -t osquery_exporter .
+```
+
+To run the container
+```bash
+docker run --rm -p 5000:5000 osquery_exporter
+```
+After the container is running, the regular curl request should work.

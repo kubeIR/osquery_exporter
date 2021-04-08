@@ -24,5 +24,5 @@ RUN wget $REPO/$VERSION/osquery_exporter_${VERSION}_linux_amd64.tar.gz && \
 
 EXPOSE 5000
 
-CMD ["osqueryi", "--disable_events=false", "--allow_unsafe", "--verbose"]
+CMD ["osqueryd"]
 
