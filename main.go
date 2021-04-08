@@ -36,6 +36,7 @@ func main() {
 		err error
 	)
 
+	glog.Infof("Starting with the socket file: %s", *socket)
 	c, err = client.NewOsqueryClient(*socket, timeoutDuration)
 	if err != nil {
 		glog.Fatal(err)
