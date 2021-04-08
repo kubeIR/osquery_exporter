@@ -6,12 +6,13 @@ LABEL maintainer=prateeknischal \
 
 RUN yum update -y && yum install -y git openssl wget
 
-ENV VERSION=0.2.0-alpha
 ENV REPO="https://github.com/prateeknischal/osquery_exporter/releases/download"
 
 RUN  wget "https://pkg.osquery.io/rpm/osquery-4.7.0-1.linux.x86_64.rpm" && \
     rpm -i osquery-4.7.0-1.linux.x86_64.rpm && \
     echo "{}" > /etc/osquery/osquery.conf
+
+ARG VERSION=0.2.0-alpha
 
 RUN wget $REPO/$VERSION/osquery_exporter_${VERSION}_linux_amd64.tar.gz && \
     mkdir -p /etc/osquery && \
