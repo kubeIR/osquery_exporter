@@ -1,16 +1,17 @@
-version?=0.0.1
-commit=$(shell git rev-parse --short HEAD)
+VERSION?=$(shell git describe --tags --dirty)
 UNAME_S:= $(shell uname -s)
-package=github.com/prateeknischal/osqueryexporter/internal
-LDFLAGS= -X $(package)/constants.Version=$(version)
-LDFLAGS+= -X $(package)/constants.Commit=$(commit)
-
-#ifeq ($(UNAME_S),Linux)
-	#LDFLAGS+= -extldflags '-static' -linkmode external
-#endif
+LDFLAGS= -X main.versionString=$(VERSION)
 
 build:
 	go build -ldflags "-s -w $(LDFLAGS)" -o osquery_exporter
 
 test:
 	go test -race -v ./...
+
+docker:
+	docker build -t osquery_exporter:latest \
+		--build-arg VERSION=${version} \
+		--build-arg OSQUERY_VERSION=4.7.0-1 \
+		--build-arg OSQUERY_CONFIG='{}' \
+		--build-arg OSQUERY_FLAGS='' .
+

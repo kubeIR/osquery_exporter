@@ -34,10 +34,8 @@ The above request returns
 ## Building the project
 The project is written in and go and can be built using GNU `make`.
 ```bash
-$ make
+$ make build
 $ ./osquery_exporter --version
-0.0.1-alpha+25571f8
-
 $ ./osquery_exporter --socket /path/to/osquery.sock --addr "0.0.0.0:5000"
 ```
 
@@ -49,11 +47,11 @@ explicitly and is not managed by osquery using its extension autoload feature.
 A container can be built out of the extension that is running osqueryd as well
 as the extension. To build the container,
 ```bash
-docker build --build-args VERSION=<release-version> -t osquery_exporter .
+$ make docker
 ```
 
 To run the container
 ```bash
-docker run --rm -p 5000:5000 osquery_exporter
+$ docker run --rm -it -p 5000:5000 osquery_exporter
 ```
 After the container is running, the regular curl request should work.

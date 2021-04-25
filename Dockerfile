@@ -1,28 +1,35 @@
-FROM centos:8
+FROM golang:latest
+
+COPY ./ /app
+WORKDIR /app
+
+RUN make test && make build
+
+FROM centos:latest
+
+ARG VERSION="latest"
+ARG OSQUERY_VERSION="4.7.0-1"
+ARG OSQUERY_CONFIG="{}"
+ARG OSQUERY_FLAGS=""
 
 LABEL maintainer=prateeknischal \
-    version=0.0.1-alpha \
-    project=kubeir
+    version=${VERSION}\
+    project=github.com/kubeIR
 
-RUN yum update -y && yum install -y git openssl wget
+RUN yum update -y && yum install wget -y
 
-ENV REPO="https://github.com/prateeknischal/osquery_exporter/releases/download"
+RUN wget "https://pkg.osquery.io/rpm/osquery-${OSQUERY_VERSION}.linux.x86_64.rpm" \
+        -O osquery.rpm && \
+    rpm -i osquery.rpm && \
+    echo "${OSQUERY_CONFIG}" > /etc/osquery/osquery.conf && \
+    echo "${OSQUERY_FLAGS}" > /etc/osquery/osquery.flags
 
-RUN  wget "https://pkg.osquery.io/rpm/osquery-4.7.0-1.linux.x86_64.rpm" && \
-    rpm -i osquery-4.7.0-1.linux.x86_64.rpm && \
-    echo "{}" > /etc/osquery/osquery.conf
+COPY --from=0 /app/osquery_exporter /etc/osquery/osquery_exporter.ext
 
-ARG VERSION=0.2.0-alpha
-
-RUN wget $REPO/$VERSION/osquery_exporter_${VERSION}_linux_amd64.tar.gz && \
-    mkdir -p /etc/osquery && \
-    tar -C /etc/osquery -xf osquery_exporter_${VERSION}_linux_amd64.tar.gz && \
-    mv /etc/osquery/osquery_exporter /etc/osquery/osquery_exporter.ext && \
-    chown root:root /etc/osquery/osquery_exporter.ext && \
+RUN chown root:root /etc/osquery/osquery_exporter.ext && \
     chmod 500 /etc/osquery/osquery_exporter.ext && \
     echo "/etc/osquery/osquery_exporter.ext" > /etc/osquery/extensions.load
 
 EXPOSE 5000
 
 CMD ["osqueryd"]
-

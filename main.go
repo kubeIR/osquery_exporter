@@ -10,22 +10,23 @@ import (
 	"github.com/golang/glog"
 	"github.com/prateeknischal/osqueryexporter/internal/api"
 	"github.com/prateeknischal/osqueryexporter/internal/client"
-	"github.com/prateeknischal/osqueryexporter/internal/constants"
 )
+
+var versionString = "unknown"
 
 var (
 	socket   = flag.String("socket", "", "osquery Socket file")
 	timeout  = flag.Int("timeout", 3, "Timeout to connect to socket file")
 	interval = flag.Int("interval", 3, "Delay between connectivity checks")
 	verbose  = flag.Bool("verbose", false, "Enable verbose output")
-	ver      = flag.Bool("version", false, "Version")
 	addr     = flag.String("addr", "0.0.0.0:5000", "host:port to listen on")
+	version  = flag.Bool("version", false, "Get Version")
 )
 
 func main() {
 	flag.Parse()
-	if *ver {
-		fmt.Fprintln(os.Stdout, constants.GetVersion())
+	if *version {
+		fmt.Fprintln(os.Stdout, versionString)
 		os.Exit(0)
 	}
 
