@@ -10,7 +10,7 @@ test:
 
 docker:
 	docker build -t osquery_exporter:latest \
-		--build-arg VERSION=${version} \
+		--build-arg VERSION=${VERSION} \
 		--build-arg OSQUERY_VERSION=4.7.0-1 \
 		--build-arg OSQUERY_CONFIG='{}' \
 		--build-arg OSQUERY_FLAGS='' .
