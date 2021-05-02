@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: setup version
         id: get-version
         run: |
@@ -19,8 +21,7 @@ jobs:
       - name: Push to docker hub
         uses: docker/build-push-action@v1
         with:
-          build-args: |
-            VERSION=${{ steps.get-version.outputs.version }}
+          build_args: VERSION=${{ steps.get-version.outputs.version }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: kubeir/osquery-exporter
