@@ -15,6 +15,10 @@ func Server(ctx context.Context, addr string, cl client.Client) {
 	handler := QueryHandler{cl}
 	r := mux.NewRouter()
 	r.HandleFunc("/query", handler.handle).Methods(http.MethodPost)
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// health check endpoint for kubernetes
+		w.WriteHeader(http.StatusOK)
+	})
 
 	server := http.Server{
 		Addr:    addr,
