@@ -3,7 +3,10 @@ FROM golang:latest
 COPY ./ /app
 WORKDIR /app
 
-RUN make test && make build
+ARG VERSION="unknown"
+
+RUN make test && \
+    make build VERSION="${VERSION}"
 
 FROM centos:latest
 

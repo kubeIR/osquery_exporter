@@ -12,9 +12,15 @@ jobs:
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v2
+      - name: setup version
+        id: get-version
+        run: |
+          echo "::set-output name=version::$(git describe --tags)"
       - name: Push to docker hub
         uses: docker/build-push-action@v1
         with:
+          build-args: |
+            VERSION=${{ steps.get-version.outputs.version }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: kubeir/osquery-exporter
